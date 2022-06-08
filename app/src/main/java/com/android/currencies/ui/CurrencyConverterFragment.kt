@@ -1,18 +1,15 @@
 package com.android.currencies.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.WorkInfo
 import com.android.currencies.CurrencyConverterApplication
 import com.android.currencies.R
 import com.android.currencies.adapter.CurrencyGridAdapter
@@ -38,9 +35,10 @@ class CurrencyConverterFragment : Fragment(), CurrencyGridAdapter.OnClickListene
     ): View? {
         val view = inflater.inflate(R.layout.currency_converter_fragment, container, false)
         initRecyclerView(view)
-        observeCurrencies()
-        initSpinnerData(view)
+        initViewModel()
+        observeWorkerLiveData(view)
         editTextDta(view)
+        observeProgressBarLiveData(view)
         return view
     }
 
@@ -48,19 +46,40 @@ class CurrencyConverterFragment : Fragment(), CurrencyGridAdapter.OnClickListene
         enteredValueEditText = view.findViewById(R.id.amount)
     }
 
+    private fun observeProgressBarLiveData(view: View) {
+        currencyConverterViewModel.progressBarLiveData.observe(viewLifecycleOwner, {
+            if(it == false) {
+                view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+            }
+            else {
+                view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+            }
+
+        })
+    }
+
+    private fun observeWorkerLiveData(view: View) {
+        currencyConverterViewModel.updatesFromWorkerLiveData.observe(viewLifecycleOwner, {
+            val workInfo = it[0]
+
+            if (workInfo.state == WorkInfo.State.ENQUEUED) {
+                initSpinnerData(view)
+            }
+        })
+    }
+
     private fun initRecyclerView(view: View) {
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
         currencyRatesAdapter = CurrencyGridAdapter(this)
         recyclerView.adapter = currencyRatesAdapter
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-
     }
 
-    private fun observeCurrencies() {
+    private fun initViewModel() {
         val repository =
             (activity?.application as CurrencyConverterApplication).currencyConverterRepository
         currencyConverterViewModel =
-            ViewModelProvider(this, CurrencyConverterViewModelFactory(repository))
+            ViewModelProvider(this, CurrencyConverterViewModelFactory(repository, activity?.application!!))
                 .get(CurrencyConverterViewModel::class.java)
 
     }

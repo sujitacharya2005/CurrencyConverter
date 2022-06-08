@@ -18,12 +18,10 @@ class CurrencyConverterApplication : Application() {
     }
 
     private fun scheduleWorker() {
-        println("sujit app scheduleWorker")
         CurrencyRefreshWorker.scheduleWorker(this)
     }
 
     private fun initialize() {
-        println("sujit app initialize")
         val coinExchangeRateService = RetrofitHelper.retrofitClient().create(
             CurrencyConverterService::class.java)
         val database = CurrencyConverterDatabase.getDatabase(applicationContext)

@@ -1,31 +1,32 @@
 package com.android.currencies.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.work.*
 import com.android.currencies.CurrencyConverterApplication
+import com.android.currencies.constants.TAG_CHANGE
 import com.android.currencies.data.remote.ApiResult
 import java.util.concurrent.TimeUnit
+
+private const val TAG = "CurrencyRefreshWorker"
 
 class CurrencyRefreshWorker(
     private val appContext: Context, workerParams: WorkerParameters,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        println("sujit worker doWork")
-
         val repo = (appContext as CurrencyConverterApplication).currencyConverterRepository;
 
         when (val result = repo.getRemoteExchangeRates()) {
             is ApiResult.Success -> {
-                println("sujit success " + result.data.rates)
                 repo.insertCurrenciesData(result.data.rates)
                 return Result.success()
             }
             is ApiResult.NetworkError -> {
-                println("sujit No Internet")
+                Log.e(TAG, "doWork: No Internet")
                 return Result.retry()
             }
-            is ApiResult.Error -> println("sujit Error..." + result.statusCode)
+            is ApiResult.Error -> Log.e(TAG, "doWork:Error..." + result.statusCode)
         }
 
         return Result.failure()
@@ -49,8 +50,8 @@ class CurrencyRefreshWorker(
                     30,
                     TimeUnit.SECONDS)
                 .setConstraints(constraints)
+                .addTag(TAG_CHANGE)
                 .build()
-            println("sujit worker scheduleWorker")
 
             WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork("currency_worker",
