@@ -1,5 +1,9 @@
 package com.android.currencies.util
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import com.android.currencies.data.local.model.CurrencyData
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -24,5 +28,18 @@ private fun convertFromCurrencyToDollar(amount: BigDecimal, fromRate: Double): B
 
 private fun convertDollarToCurrency(dollarValue: BigDecimal, toRate: Double): BigDecimal {
     return dollarValue.multiply(BigDecimal.valueOf(toRate))
+}
+
+fun availableInternet(context: Context): Boolean {
+    (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return this.getNetworkCapabilities(this.activeNetwork)?.hasCapability(
+                NetworkCapabilities.NET_CAPABILITY_INTERNET
+            ) ?: false
+        } else {
+            (@Suppress("DEPRECATION")
+            return this.activeNetworkInfo?.isConnected ?: false)
+        }
+    }
 }
 

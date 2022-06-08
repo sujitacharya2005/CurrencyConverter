@@ -33,22 +33,13 @@ class CurrencyRefreshWorker(
     }
 
     companion object {
-
-
         fun scheduleWorker(context: Context) {
-
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-            val work = PeriodicWorkRequest.Builder(CurrencyRefreshWorker::class.java,
-                30L,
-                TimeUnit.MINUTES
-            )
-                .setBackoffCriteria(
-                    BackoffPolicy.LINEAR,
-                    30,
-                    TimeUnit.SECONDS)
+            val work = PeriodicWorkRequest.Builder(CurrencyRefreshWorker::class.java, 30L, TimeUnit.MINUTES)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, 30, TimeUnit.SECONDS)
                 .setConstraints(constraints)
                 .addTag(TAG_CHANGE)
                 .build()
