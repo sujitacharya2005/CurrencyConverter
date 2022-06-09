@@ -4,10 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import com.android.currencies.data.local.CurrencyConverterDatabase
-import com.android.currencies.data.remote.CurrencyConverterService
-import com.android.currencies.data.remote.RetrofitHelper
-import com.android.currencies.repository.CurrencyConverterRepository
 import com.android.currencies.worker.CurrencyRefreshWorker
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope

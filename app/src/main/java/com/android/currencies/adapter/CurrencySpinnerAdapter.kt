@@ -15,7 +15,7 @@ class CurrencySpinnerAdapter(
 ) : ArrayAdapter<CurrencyData>(context, textViewResourceId, list) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val label:TextView = if(convertView == null) {
+        val label: TextView = if (convertView == null) {
             super.getDropDownView(position, convertView, parent) as TextView
         } else {
             convertView as TextView
@@ -30,10 +30,10 @@ class CurrencySpinnerAdapter(
         position: Int, convertView: View?,
         parent: ViewGroup?,
     ): View {
-        val label:TextView = if(convertView == null) {
-             super.getDropDownView(position, convertView, parent) as TextView
+        val label: TextView = if (convertView == null) {
+            super.getDropDownView(position, convertView, parent) as TextView
         } else {
-             convertView as TextView
+            convertView as TextView
         }
         label.setTextColor(Color.BLACK)
         label.text = list[position].symbol
