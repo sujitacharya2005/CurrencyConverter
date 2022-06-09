@@ -35,12 +35,12 @@ class CurrencyConverterFragment : Fragment(), OnItemActionListener {
         binding = CurrencyConverterFragmentBinding.inflate(inflater, container, false)
         initRecyclerView()
         observeWorkerLiveData()
-        observeProgressBarLiveData(binding.root)
+        observeProgressBarLiveData()
         return binding.root
     }
 
 
-    private fun observeProgressBarLiveData(view: View) {
+    private fun observeProgressBarLiveData() {
         currencyConverterViewModel.progressBarLiveData.observe(viewLifecycleOwner, {
             binding.progressBarVisibility = it
         })
