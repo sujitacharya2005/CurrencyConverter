@@ -6,21 +6,10 @@ import com.android.currencies.data.local.model.CurrencyData
 import com.android.currencies.data.remote.CurrencyConverterService
 import com.android.currencies.data.remote.apiCall
 import com.android.currencies.data.remote.model.LatestCurrencyResponse
+import javax.inject.Inject
 
-class CurrencyConverterRepository(private val currencyConverterService: CurrencyConverterService,
-                                  private val currencyConverterDao: CurrencyConverterDao,
-                                  private val applicationContext: Context) {
-
-    suspend fun getRates() : List<CurrencyData> {
-        return getLocalExchangeRates()
-    }
-
-    /*
-    Fetch from room db
-     */
-    private fun getLocalExchangeRates(): List<CurrencyData> {
-        return mutableListOf()
-    }
+class CurrencyConverterRepository  @Inject constructor(private val currencyConverterService: CurrencyConverterService,
+                                                       private val currencyConverterDao: CurrencyConverterDao) {
 
     /*
    Fetch from remote api

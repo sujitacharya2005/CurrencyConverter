@@ -2,20 +2,27 @@ package com.android.currencies.worker
 
 import android.content.Context
 import android.util.Log
+import androidx.hilt.work.HiltWorker
 import androidx.work.*
-import com.android.currencies.CurrencyConverterApplication
 import com.android.currencies.constants.TAG_CHANGE
 import com.android.currencies.data.remote.ApiResult
+import com.android.currencies.repository.CurrencyConverterRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "CurrencyRefreshWorker"
 
-class CurrencyRefreshWorker(
-    private val appContext: Context, workerParams: WorkerParameters,
+@HiltWorker
+class CurrencyRefreshWorker @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val currencyConverterRepository: CurrencyConverterRepository
 ) : CoroutineWorker(appContext, workerParams) {
 
+
     override suspend fun doWork(): Result {
-        val repo = (appContext as CurrencyConverterApplication).currencyConverterRepository;
+        val repo = currencyConverterRepository
 
         when (val result = repo.getRemoteExchangeRates()) {
             is ApiResult.Success -> {
