@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Currencies</string>
+    <string name="enter_value_hint">Enter value</string>
 </resources>

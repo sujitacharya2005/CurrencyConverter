@@ -31,7 +31,7 @@ class CurrencyConverterFragment : Fragment(), OnItemActionListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         binding = CurrencyConverterFragmentBinding.inflate(inflater, container, false)
         initRecyclerView()
         observeWorkerLiveData()
@@ -63,30 +63,28 @@ class CurrencyConverterFragment : Fragment(), OnItemActionListener {
 
     private fun initSpinnerData() {
         val spinner = binding.selectedCurrency
-        if (spinner != null) {
-            currencyConverterViewModel.getCurrencies()
-            currencyConverterViewModel.symbolsLiveData.observe(viewLifecycleOwner, { currencies ->
-                currencyRatesAdapter.submitList(currencies)
-                context?.let {
-                    currencySpinnerAdapter = CurrencySpinnerAdapter(it,
-                        android.R.layout.simple_spinner_dropdown_item, currencies)
-                    spinner.adapter = currencySpinnerAdapter
-                }
-            })
+        currencyConverterViewModel.getCurrencies()
+        currencyConverterViewModel.symbolsLiveData.observe(viewLifecycleOwner, { currencies ->
+            currencyRatesAdapter.submitList(currencies)
+            context?.let {
+                currencySpinnerAdapter = CurrencySpinnerAdapter(it,
+                    android.R.layout.simple_spinner_dropdown_item, currencies)
+                spinner.adapter = currencySpinnerAdapter
+            }
+        })
 
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long,
-                ) {
-                    fromCurrencyData = currencySpinnerAdapter.getItem(position)
-                }
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long,
+            ) {
+                fromCurrencyData = currencySpinnerAdapter.getItem(position)
+            }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    TODO("Not yet implemented")
-                }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
             }
         }
     }

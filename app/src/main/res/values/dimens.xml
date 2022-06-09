@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_fragment">30dp</dimen>
+    <dimen name="spinner_width">100dp</dimen>
+    <dimen name="spinner_down_vertical_offset">50dp</dimen>
+</resources>

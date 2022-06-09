@@ -1,11 +1,9 @@
 package com.android.currencies.repository
 
-import android.content.Context
 import com.android.currencies.data.local.CurrencyConverterDao
 import com.android.currencies.data.local.model.CurrencyData
 import com.android.currencies.data.remote.CurrencyConverterService
 import com.android.currencies.data.remote.apiCall
-import com.android.currencies.data.remote.model.LatestCurrencyResponse
 import javax.inject.Inject
 
 class CurrencyConverterRepository  @Inject constructor(private val currencyConverterService: CurrencyConverterService,
