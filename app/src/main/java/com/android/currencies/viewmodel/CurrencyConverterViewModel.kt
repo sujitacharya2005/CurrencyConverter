@@ -75,8 +75,10 @@ class CurrencyConverterViewModel @Inject constructor(
 
     fun getConvertedValue(fromCurrencyData:CurrencyData?,
                           toCurrencyData:CurrencyData?, enteredValue:Double) {
-        val convertedValue = convertToCurrency(fromCurrencyData, toCurrencyData, enteredValue)
-        _convertedValueLiveData.postValue(convertedValue)
+        viewModelScope.launch(Dispatchers.IO) {
+            val convertedValue = convertToCurrency(fromCurrencyData, toCurrencyData, enteredValue)
+            _convertedValueLiveData.postValue(convertedValue)
+        }
     }
 
 }
