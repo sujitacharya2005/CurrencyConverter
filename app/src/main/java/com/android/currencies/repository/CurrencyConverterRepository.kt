@@ -17,11 +17,7 @@ class CurrencyConverterRepository  @Inject constructor(private val currencyConve
     }
 
     fun insertCurrenciesData(currencies: Map<String, Double>?) {
-        if(currencies != null) {
-            for((key, value) in currencies) {
-                currencyConverterDao.insertCurrency(CurrencyData(symbol = key, value = value))
-            }
-        }
+        currencyConverterDao.insertCurrenciesData(currencies)
     }
 
     fun getSymbols() =

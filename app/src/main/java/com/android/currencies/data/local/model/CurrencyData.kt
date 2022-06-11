@@ -8,6 +8,5 @@ data class CurrencyData(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val symbol: String,
-    val value: Double,
-)
+    val value: Double)
 
